@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.min.css'; 
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -20,10 +20,18 @@ const Login = () => {
 
             console.log('API Response:', response.data);
 
+            // Lưu userId và token vào localStorage
+            const { user, token } = response.data;
+            if (user && user.id) {
+                localStorage.setItem('userId', user.id); // Lưu userId
+                localStorage.setItem('token', token); // Lưu token nếu cần dùng để xác thực
+                localStorage.setItem('role', user.role); // Lưu role nếu cần
+            }
+
             setMessage(response.data.message);
             setMessageClass('alert alert-success');
 
-            if (response.data.user?.role === 'admin') {
+            if (user.role === 'admin') {
                 navigate('/admin');
             } else {
                 navigate('/home');
@@ -39,28 +47,28 @@ const Login = () => {
         <div className="container d-flex justify-content-center align-items-center min-vh-100">
             <div className="card p-4 shadow-lg" style={{ width: '400px' }}>
                 <h2 className="text-center mb-3">Đăng nhập</h2>
-                
+
                 {message && <div className={messageClass}>{message}</div>}
 
                 <form onSubmit={handleSubmit}>
                     <div className="mb-3">
                         <label className="form-label">Email:</label>
-                        <input 
-                            type="email" 
+                        <input
+                            type="email"
                             className="form-control"
-                            value={email} 
-                            onChange={(e) => setEmail(e.target.value)} 
-                            required 
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
                         />
                     </div>
                     <div className="mb-3">
                         <label className="form-label">Mật khẩu:</label>
-                        <input 
-                            type="password" 
+                        <input
+                            type="password"
                             className="form-control"
-                            value={password} 
-                            onChange={(e) => setPassword(e.target.value)} 
-                            required 
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
                         />
                     </div>
                     <button type="submit" className="btn btn-primary w-100">Đăng nhập</button>

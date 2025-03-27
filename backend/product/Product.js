@@ -40,7 +40,6 @@ const Product = sequelize.define('Product', {
     updatedAt: 'updated_at',
 });
 
-// ✅ Sửa lại tham chiếu đúng với `Categories`
 Product.belongsTo(Categories, { foreignKey: 'category_id', onDelete: 'CASCADE' });
 
 export default Product;
