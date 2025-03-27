@@ -12,6 +12,7 @@ import Home from './view/user/Home';
 import CategoryPage from './view/user/CategoryPage/CategoryPage';
 import ProductDetail from './view/user/ProductDetail/ProductDetail';
 import CartUser from './view/user/cart/CartUser';
+import Checkout from './view/user/Checkout/Checkout';
 
 
 function App() {
@@ -30,6 +31,8 @@ function App() {
         <Route path="/categorypage/:id" element={<><Header /><CategoryPage/></>} />
         <Route path="/product/:id" element={<><Header /><ProductDetail/></>} />
         <Route path="/cartuser" element={<><Header /><CartUser/></>} />
+        <Route path="/checkout" element={<Checkout/>} />
+        
         
         
 
