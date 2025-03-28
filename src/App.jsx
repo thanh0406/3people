@@ -13,6 +13,7 @@ import CategoryPage from './view/user/CategoryPage/CategoryPage';
 import ProductDetail from './view/user/ProductDetail/ProductDetail';
 import CartUser from './view/user/cart/CartUser';
 import Checkout from './view/user/Checkout/Checkout';
+import OrderConfirmation from './view/user/oder/OrderConfirmation';
 
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
         <Route path="/product/:id" element={<><Header /><ProductDetail/></>} />
         <Route path="/cartuser" element={<><Header /><CartUser/></>} />
         <Route path="/checkout" element={<Checkout/>} />
+        <Route path="/oderconfirmation" element={<><Header /><OrderConfirmation/></>} />
         
         
         
