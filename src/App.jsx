@@ -14,7 +14,8 @@ import ProductDetail from './view/user/ProductDetail/ProductDetail';
 import CartUser from './view/user/cart/CartUser';
 import Checkout from './view/user/Checkout/Checkout';
 import OrderConfirmation from './view/user/oder/OrderConfirmation';
-
+import RevenueAdmin from './view/admin/revenue/RevenueAdmin'
+import OrderAdmin from './view/admin/OrderAdmin/OrderAdmin';
 
 function App() {
   return (
@@ -28,6 +29,8 @@ function App() {
         <Route path="/categoriesAdmin" element={<><HeaderAdmin /><CategoriesAdmin /></>} />
         <Route path="/productAdmin" element={<><HeaderAdmin /><ProductAdmin /></>} />
         <Route path="/accountAdmin" element={<><HeaderAdmin /><AccountAdmin /></>} />
+        <Route path="/revenueadmin" element={<><HeaderAdmin /><RevenueAdmin /></>} />
+        <Route path="/oderadmin" element={<><HeaderAdmin /><OrderAdmin /></>} />
         <Route path="/header-user" element={<><Header /><Home /></>} />
         <Route path="/categorypage/:id" element={<><Header /><CategoryPage/></>} />
         <Route path="/product/:id" element={<><Header /><ProductDetail/></>} />

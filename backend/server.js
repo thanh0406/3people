@@ -9,6 +9,7 @@ import Cart from './Cart/Cart.js';
 import Orders from './checkout/Orders.js';
 
 
+
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -455,6 +456,21 @@ app.get('/api/cart/:userId', async (req, res) => {
       console.error('Lỗi khi lấy danh sách đơn hàng:', error);
       res.status(500).json({ message: 'Lỗi server khi lấy danh sách đơn hàng' });
     }
+  }); 
+  
+  app.get('/checkout', async (req, res) => {
+    try {
+      const orders = await Orders.findAll(); 
+  
+      if (!orders.length) {
+        return res.status(404).json({ message: 'Không có đơn hàng nào.' });
+      }
+  
+      res.status(200).json({ success: true, data: orders });
+    } catch (error) {
+      console.error('Lỗi khi lấy danh sách đơn hàng:', error);
+      res.status(500).json({ success: false, message: 'Lỗi server khi lấy danh sách đơn hàng' });
+    }
   });
   
   // POST: Tạo đơn hàng từ giỏ hàng (thanh toán)
@@ -500,49 +516,34 @@ app.get('/api/cart/:userId', async (req, res) => {
     }
   });
   
-  // PUT: Cập nhật trạng thái đơn hàng (ví dụ: từ 'pending' sang 'completed')
-  app.put('/checkout/:userId', async (req, res) => {
-    const { userId } = req.params; // Lấy userId từ params thay vì id
-    const { status } = req.body;
-  
-    // Kiểm tra trạng thái hợp lệ
-    if (!status || !['pending', 'completed', 'cancelled'].includes(status)) {
-      return res.status(400).json({ message: 'Trạng thái không hợp lệ. Chỉ chấp nhận: pending, completed, cancelled' });
-    }
-  
+  app.put('/orders/:id/cancel', async (req, res) => {
     try {
-      // Tìm tất cả đơn hàng của userId
-      const orders = await Orders.findAll({
-        where: { user_id: userId },
-      });
-  
-      // Nếu không tìm thấy đơn hàng nào
-      if (!orders || orders.length === 0) {
-        return res.status(404).json({ message: 'Không tìm thấy đơn hàng nào cho người dùng này' });
+      const order = await Orders.findByPk(req.params.id);
+      if (!order) {
+        return res.status(404).json({ error: 'Đơn hàng không tồn tại' });
       }
-  
-      // Cập nhật trạng thái cho tất cả đơn hàng
-      await Orders.update(
-        { status }, // Dữ liệu cần cập nhật
-        { where: { user_id: userId } } // Điều kiện cập nhật
-      );
-  
-      // Lấy lại danh sách đơn hàng đã cập nhật để trả về (tùy chọn)
-      const updatedOrders = await Orders.findAll({
-        where: { user_id: userId },
-      });
-  
-      res.status(200).json({
-        message: 'Cập nhật trạng thái đơn hàng thành công',
-        orders: updatedOrders,
-      });
+      order.status = 'cancelled';
+      await order.save();
+      res.status(200).json({ message: 'Đơn hàng đã được hủy', order });
     } catch (error) {
-      console.error('Lỗi khi cập nhật đơn hàng:', error);
-      res.status(500).json({ message: 'Lỗi server khi cập nhật đơn hàng' });
+      console.error('Lỗi khi hủy đơn hàng:', error);
+      res.status(500).json({ error: 'Lỗi server khi hủy đơn hàng' });
     }
   });
-
-
+  
+  app.delete('/orders/:id', async (req, res) => {
+    try {
+      const order = await Orders.findByPk(req.params.id);
+      if (!order) {
+        return res.status(404).json({ message: 'Không tìm thấy đơn hàng' });
+      }
+      await order.destroy();
+      res.status(200).json({ message: 'Đơn hàng đã được xóa' });
+    } catch (error) {
+      console.error('Lỗi khi xóa đơn hàng:', error);
+      res.status(500).json({ message: 'Lỗi server khi xóa đơn hàng' });
+    }
+  });
 
   
 app.listen(3000, () => {

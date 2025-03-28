@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { FaHome, FaThList, FaBox, FaUser, FaShoppingCart } from 'react-icons/fa';
+import { FaHome, FaThList, FaBox, FaUser, FaShoppingCart, FaDollarSign} from 'react-icons/fa';
 import { FaSignOutAlt } from 'react-icons/fa';
 
 const HeaderAdmin = () => {
@@ -46,8 +46,13 @@ const HeaderAdmin = () => {
                             </button>
                         </li>
                         <li className="nav-item">
-                            <button className="btn btn-outline-dark mx-1" onClick={() => navigate('/orders')}>
+                            <button className="btn btn-outline-dark mx-1" onClick={() => navigate('/oderadmin')}>
                                 <FaShoppingCart className="me-1" /> Đơn hàng
+                            </button>
+                        </li>
+                        <li className="nav-item">
+                            <button className="btn btn-outline-dark mx-1" onClick={() => navigate('/revenueadmin')}>
+                                <FaDollarSign className="me-1" /> Doanh thu
                             </button>
                         </li>
                     </ul>
